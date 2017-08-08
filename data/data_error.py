@@ -1,7 +1,8 @@
 class DataError(Exception):
-    pass
+    def __init__(self, message):
+        self.message = message
 
 
 class InsertError(DataError):
     def __init__(self, message):
-        self.message = message
+        DataError.__init__(self, message)

@@ -2,14 +2,17 @@ import json
 
 from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError
+from logging import getLogger
 
-from data.data_error import InsertError
+from data.data_error import InsertError, DataError
 from data.decimal_encoder import DecimalEncoder
 
 TABLE_NAME = 'restaurants'
 
 
 class RestaurantStorage:
+    logger = getLogger('eatspection.data.restaurant_storage')
+
     def __init__(self, resource):
         self.resource = resource
 
@@ -17,7 +20,7 @@ class RestaurantStorage:
         table = self.resource.Table(TABLE_NAME)
 
         try:
-            response = table.put_item(
+            table.put_item(
                 Item={
                     'id': restaurant.id,
                     'name': restaurant.name,
@@ -32,8 +35,7 @@ class RestaurantStorage:
         except Exception as err:
             raise InsertError(err)
         else:
-            print("PutItem succeeded:")
-            print(json.dumps(response, indent=4, cls=DecimalEncoder))
+            self.logger.info("PutItem succeeded for id:" + restaurant.id)
 
     def get_by_id(self, rid):
         table = self.resource.Table(TABLE_NAME)
@@ -45,10 +47,14 @@ class RestaurantStorage:
                 }
             )
         except ClientError as e:
-            print(e.response['Error']['Message'])
+            message = e.response['Error']['Message']
+            self.logger.info(message)
+            raise DataError(message)
         else:
+            if 'Item' not in response:
+                return None
             item = response['Item']
-            print("GetItem succeeded:")
+            self.logger.debug("GetItem succeeded:")
             return json.dumps(item, indent=4, cls=DecimalEncoder)
 
     def get_by_zip(self, zip_code):
@@ -59,8 +65,9 @@ class RestaurantStorage:
                 KeyConditionExpression=Key('zip_code').eq(zip_code)
             )
         except ClientError as e:
-            print(e.response['Error']['Message'])
+            message = e.response['Error']['Message']
+            self.logger.info(message)
+            raise DataError(message)
         else:
             item = response['Item']
-            print("GetItem succeeded:")
             return json.dumps(item, indent=4, cls=DecimalEncoder)
