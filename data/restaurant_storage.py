@@ -3,6 +3,8 @@ import json
 from data.data_error import InsertError
 from data.decimal_encoder import DecimalEncoder
 
+
+
 TABLE_NAME = 'restaurants'
 
 
@@ -16,6 +18,7 @@ class RestaurantStorage:
         try:
             response = table.put_item(
                 Item={
+                    'id': restaurant.id,
                     'name': restaurant.name,
                     'inspect_date': restaurant.inspect_date,
                     'score': restaurant.score,
