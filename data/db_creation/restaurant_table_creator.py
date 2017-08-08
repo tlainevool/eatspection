@@ -6,7 +6,6 @@ logger = getLogger('eatspection.data.creation')
 
 
 class RestaurantTableCreator:
-
     def __init__(self, db_resource):
         self.db_resource = db_resource
 
