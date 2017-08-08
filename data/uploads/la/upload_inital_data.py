@@ -24,7 +24,7 @@ with open('LOS_ANGELES_COUNTY_RESTAURANT_AND_MARKET_VIOLATIONS-2017-07-20.csv', 
         name = capitalize_all(data["NAME"])
         inspect_date = todate(data["ACTIVITY DATE"])
         score = data["SCORE"]
-        address = capitalize_all(data["SITE ZIP"])
+        address = capitalize_all(data["SITE ADDRESS"])
         city = capitalize_all(data["SITE CITY"])
         state = data["SITE STATE"]
         zip_code = data["SITE ZIP"]
