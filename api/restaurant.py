@@ -32,6 +32,5 @@ def get_restaurants_by_id(restaurant_id):
     except DataError as de:
         abort(500, "Unknown error:" + de.message)
 
-
 if __name__ == '__main__':
     app.run(debug=True)

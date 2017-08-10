@@ -1,6 +1,5 @@
 import json
 
-from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError
 from logging import getLogger
 
@@ -14,13 +13,13 @@ class RestaurantStorage:
     logger = getLogger('eatspection.data.restaurant_storage')
 
     def __init__(self, resource):
-        self.resource = resource
+        resource = resource
+        self.table = resource.Table(TABLE_NAME)
 
     def insert(self, restaurant):
-        table = self.resource.Table(TABLE_NAME)
 
         try:
-            table.put_item(
+            self.table.put_item(
                 Item={
                     'id': restaurant.id,
                     'name': restaurant.name,
@@ -38,10 +37,9 @@ class RestaurantStorage:
             self.logger.info("PutItem succeeded for id:" + restaurant.id)
 
     def get_by_id(self, rid):
-        table = self.resource.Table(TABLE_NAME)
 
         try:
-            response = table.get_item(
+            response = self.table.get_item(
                 Key={
                     'id': rid
                 }
@@ -55,19 +53,4 @@ class RestaurantStorage:
                 return None
             item = response['Item']
             self.logger.debug("GetItem succeeded:")
-            return json.dumps(item, indent=4, cls=DecimalEncoder)
-
-    def get_by_zip(self, zip_code):
-        table = self.resource.Table(TABLE_NAME)
-
-        try:
-            response = table.query(
-                KeyConditionExpression=Key('zip_code').eq(zip_code)
-            )
-        except ClientError as e:
-            message = e.response['Error']['Message']
-            self.logger.info(message)
-            raise DataError(message)
-        else:
-            item = response['Item']
             return json.dumps(item, indent=4, cls=DecimalEncoder)
