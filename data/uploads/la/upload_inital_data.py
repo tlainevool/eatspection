@@ -24,15 +24,7 @@ class LaDataUpload:
             reader = csv.DictReader(in_file, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
             restaurants = dict()
             for data in reader:
-                name = capitalize_all(data["NAME"])
-                inspect_date = self.todate(data["ACTIVITY DATE"])
-                score = data["SCORE"]
-                address = capitalize_all(data["SITE ADDRESS"])
-                city = capitalize_all(data["SITE CITY"])
-                state = data["SITE STATE"]
-                zip_code = data["SITE ZIP"]
-                rid = 'laca_' + data["RECORD ID"]
-                restaurant = Restaurant(rid, name, inspect_date, score, address, city, state, zip_code)
+                restaurant, rid = self.create_restaurant_from_data(data)
                 if rid in restaurants:
                     if restaurants[rid].inspect_date < restaurant.inspect_date:
                         restaurants[rid] = restaurant
@@ -42,6 +34,18 @@ class LaDataUpload:
             print("Number of restaurant:", len(restaurants))
             restaurants = restaurants.values()
             self.save_to_db(restaurants)
+
+    def create_restaurant_from_data(self, data):
+        name = capitalize_all(data["NAME"])
+        inspect_date = self.todate(data["ACTIVITY DATE"])
+        score = data["SCORE"]
+        address = capitalize_all(data["SITE ADDRESS"])
+        city = capitalize_all(data["SITE CITY"])
+        state = data["SITE STATE"]
+        zip_code = data["SITE ZIP"]
+        rid = 'laca_' + data["RECORD ID"]
+        restaurant = Restaurant(rid, name, inspect_date, score, address, city, state, zip_code)
+        return restaurant, rid
 
     def save_to_db(self, restaurants):
         for restaurant in restaurants:
