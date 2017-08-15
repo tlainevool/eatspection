@@ -9,7 +9,7 @@ logger = getLogger('eatspection.data.creation')
 dynamodb = boto3.resource('dynamodb', endpoint_url='http://localhost:8000')
 
 restaurants = RestaurantTableCreator(dynamodb)
-restaurants.create_table()
+restaurants.drop_table()
 
 inspections = InspectionTableCreator(dynamodb)
-inspections.create_table()
+inspections.drop_table()

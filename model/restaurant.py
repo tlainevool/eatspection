@@ -1,6 +1,16 @@
 class Restaurant:
-    def __init__(self, rid, name, inspect_date, score, address, city, state, zip_code):
-        self.id = rid
+    def __init__(self,
+                 rid,
+                 name,
+                 city,
+                 state,
+                 inspect_date=None,
+                 score=None,
+                 address=None,
+                 zip_code=None,
+                 latitude=None,
+                 longitude=None):
+        self.rid = rid
         self.zip_code = zip_code
         self.state = state
         self.city = city
@@ -8,10 +18,12 @@ class Restaurant:
         self.score = score
         self.inspect_date = inspect_date
         self.name = name
+        self.latitude = latitude
+        self.longitude = longitude
 
     def __str__(self):
         return 'Restaurant - ' \
-               'id:' + self.id + \
+               'rid:' + self.rid + \
                ' name:' + self.name + \
                ' inspect_date:' + self.inspect_date + \
                ' score:' + self.score + \
