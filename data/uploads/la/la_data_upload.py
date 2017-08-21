@@ -22,3 +22,4 @@ class LaDataUpload:
                 self.storage.insert(restaurant)
             except DataError as err:
                 print("Unexpected Error:", err)
+

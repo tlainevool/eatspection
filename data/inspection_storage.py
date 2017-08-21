@@ -9,11 +9,10 @@ from data.decimal_encoder import DecimalEncoder
 TABLE_NAME = 'inspections'
 
 
-class RestaurantStorage:
+class InspectionStorage:
     logger = getLogger('eatspection.data.inspection_storage')
 
     def __init__(self, resource):
-        resource = resource
         self.table = resource.Table(TABLE_NAME)
 
     def insert(self, inspection):
@@ -21,7 +20,7 @@ class RestaurantStorage:
         try:
             self.table.put_item(
                 Item={
-                    'id': inspection.id,
+                    'id': inspection.rid,
                     'date': inspection.date,
                     'score': inspection.score
                 }
@@ -29,7 +28,7 @@ class RestaurantStorage:
         except Exception as err:
             raise InsertError(err)
         else:
-            self.logger.info("PutItem succeeded for id:" + inspection.id)
+            self.logger.info("PutItem succeeded for id:" + inspection.rid)
 
     def get_by_id(self, rid):
 

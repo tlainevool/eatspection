@@ -1,5 +1,7 @@
 from zipfile import ZipFile
 
+from data.inspection_storage import InspectionStorage
+from data.restaurant_storage import RestaurantStorage
 from data.uploads.la.la_data_upload import LaDataUpload
 from model.inspection import Inspection
 from model.restaurant import Restaurant
@@ -21,15 +23,22 @@ def custom_split(s):
 
 
 class LivesDataUpload(LaDataUpload):
-    def upload(self):
-        with ZipFile('LaBusinesses.zip') as zip_file:
+
+    def __init__(self, resource):
+        self.resource = resource
+
+    def upload(self, file=ZipFile('LaBusinesses.zip')):
+        restaurant_storage = RestaurantStorage(self.resource)
+        inspection_storage = InspectionStorage(self.resource)
+        with file as zip_file:
             restaurants = self.read_restaurants(zip_file)
             inspections = self.read_inspections(zip_file)
             self.add_inspections(restaurants, inspections)
         for restaurant in restaurants.values():
-            print(restaurant.rid, " - ", restaurant.name)
-        for insp in inspections:
-            print(insp.rid, " - ", insp.score)
+            restaurant_storage.insert(restaurant)
+        for inspection in inspections:
+            inspection_storage.insert(inspection)
+            print(inspection.rid, " - ", inspection.score)
 
     def read_inspections(self, zip_file):
         with zip_file.open("inspections.csv") as inspections_file:

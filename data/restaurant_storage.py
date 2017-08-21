@@ -13,7 +13,6 @@ class RestaurantStorage:
     logger = getLogger('eatspection.data.restaurant_storage')
 
     def __init__(self, resource):
-        resource = resource
         self.table = resource.Table(TABLE_NAME)
 
     def insert(self, restaurant):
@@ -21,7 +20,7 @@ class RestaurantStorage:
         try:
             self.table.put_item(
                 Item={
-                    'id': restaurant.id,
+                    'id': restaurant.rid,
                     'name': restaurant.name,
                     'inspect_date': restaurant.inspect_date,
                     'score': restaurant.score,
@@ -34,7 +33,7 @@ class RestaurantStorage:
         except Exception as err:
             raise InsertError(err)
         else:
-            self.logger.info("PutItem succeeded for id:" + restaurant.id)
+            self.logger.info("PutItem succeeded for id:" + restaurant.rid)
 
     def get_by_id(self, rid):
 
