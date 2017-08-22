@@ -1,32 +1,42 @@
 from logging import getLogger
 
-from data.db_creation.base_table_creator import BaseTableCreator
-from data.restaurant_storage import TABLE_NAME
+from data.db_creation.dynamodb.base_table_creator import BaseTableCreator
+from data.dynamodb.inspection_storage import TABLE_NAME
 
 logger = getLogger('eatspection.data.creation')
 
 
-class RestaurantTableCreator(BaseTableCreator):
+class InspectionTableCreator(BaseTableCreator):
     def __init__(self, db_resource):
         super().__init__(TABLE_NAME)
         self.db_resource = db_resource
 
     def create_table(self):
-        logger.info(TABLE_NAME + " dropped.")
-        logger.info("Create table:" + TABLE_NAME + "...")
+        logger.info("Create table:" + self.table_name + "...")
         table = self.db_resource.create_table(
-            TableName=TABLE_NAME,
+            TableName=self.table_name,
             KeySchema=[
                 {
                     'AttributeName': 'id',
                     'KeyType': 'HASH'
+                },
+                {
+                    'AttributeName': 'date',
+                    'KeyType': 'RANGE'
+
                 }
+
             ],
             AttributeDefinitions=[
                 {
                     'AttributeName': 'id',
                     'AttributeType': 'S'
+                },
+                {
+                    'AttributeName': 'date',
+                    'AttributeType': 'S'
                 }
+
             ],
             ProvisionedThroughput={
                 'ReadCapacityUnits': 5,

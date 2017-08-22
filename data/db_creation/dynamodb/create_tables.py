@@ -1,8 +1,9 @@
 from logging import getLogger
-import boto3
 
+import boto3
 from data.db_creation.inspection_table_creator import InspectionTableCreator
-from data.db_creation.restaurant_table_creator import RestaurantTableCreator
+
+from data.db_creation.dynamodb.restaurant_table_creator import RestaurantTableCreator
 
 logger = getLogger('eatspection.data.creation')
 

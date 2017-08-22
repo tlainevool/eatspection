@@ -8,7 +8,7 @@ class Table:
         self.inserts.append(Item)
 
 
-class TestResource:
+class TestDynamoDBResource:
     tables = defaultdict(Table)
 
     def Table(self, name):

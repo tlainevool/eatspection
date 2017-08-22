@@ -6,34 +6,29 @@ from logging import getLogger
 from data.data_error import InsertError, DataError
 from data.decimal_encoder import DecimalEncoder
 
-TABLE_NAME = 'restaurants'
+TABLE_NAME = 'inspections'
 
 
-class RestaurantStorage:
-    logger = getLogger('eatspection.data.restaurant_storage')
+class DynamoDBInspectionStorage:
+    logger = getLogger('eatspection.data.inspection_storage')
 
     def __init__(self, resource):
         self.table = resource.Table(TABLE_NAME)
 
-    def insert(self, restaurant):
+    def insert(self, inspection):
 
         try:
             self.table.put_item(
                 Item={
-                    'id': restaurant.rid,
-                    'name': restaurant.name,
-                    'inspect_date': restaurant.inspect_date,
-                    'score': restaurant.score,
-                    'address': restaurant.address,
-                    'city': restaurant.city,
-                    'state': restaurant.state,
-                    'zip_code': restaurant.zip_code
+                    'id': inspection.rid,
+                    'date': inspection.date,
+                    'score': inspection.score
                 }
             )
         except Exception as err:
             raise InsertError(err)
         else:
-            self.logger.info("PutItem succeeded for id:" + restaurant.rid)
+            self.logger.info("PutItem succeeded for id:" + inspection.rid)
 
     def get_by_id(self, rid):
 

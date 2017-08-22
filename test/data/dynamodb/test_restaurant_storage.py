@@ -1,21 +1,21 @@
 import unittest
 
-from data.restaurant_storage import RestaurantStorage
+from data.dynamodb.restaurant_storage import DynamoDBRestaurantStorage
 from model.restaurant import Restaurant
-from test.data.test_resource import TestResource
+from test.data.test_resource import TestDynamoDBResource
 
 
-class TestRestaurantStorage(unittest.TestCase):
+class TestDynamoDBRestaurantStorage(unittest.TestCase):
     def test_insert(self):
-        resource = TestResource()
-        storage = RestaurantStorage(resource)
+        resource = TestDynamoDBResource()
+        storage = DynamoDBRestaurantStorage(resource)
         restaurant = Restaurant(
             'test_123',
             "Joe's Crabshack",
             city="Los Angeles",
             state='CA')
         storage.insert(restaurant)
-        actual = resource.get_inserts('restaurants');
+        actual = resource.get_inserts('restaurants')
         first = actual[0]
         self.assertEqual(first['id'], restaurant.rid)
         self.assertEqual(first['name'], restaurant.name)

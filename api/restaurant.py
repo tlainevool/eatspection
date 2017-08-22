@@ -4,12 +4,12 @@ from flask import Flask, jsonify, abort
 from flask import make_response
 
 from data.data_error import DataError
-from data.restaurant_storage import RestaurantStorage
+from data.dynamodb.restaurant_storage import DynamoDBRestaurantStorage
 
 app = Flask(__name__)
 
 dynamodb = boto3.resource('dynamodb', endpoint_url='http://localhost:8000')
-storage = RestaurantStorage(dynamodb)
+storage = DynamoDBRestaurantStorage(dynamodb)
 
 
 @app.errorhandler(404)

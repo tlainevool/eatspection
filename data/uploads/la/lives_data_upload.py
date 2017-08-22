@@ -1,7 +1,7 @@
 from zipfile import ZipFile
 
-from data.inspection_storage import InspectionStorage
-from data.restaurant_storage import RestaurantStorage
+from data.dynamodb.inspection_storage import DynamoDBInspectionStorage
+from data.dynamodb.restaurant_storage import DynamoDBRestaurantStorage
 from data.uploads.la.la_data_upload import LaDataUpload
 from model.inspection import Inspection
 from model.restaurant import Restaurant
@@ -28,8 +28,8 @@ class LivesDataUpload(LaDataUpload):
         self.resource = resource
 
     def upload(self, file=ZipFile('LaBusinesses.zip')):
-        restaurant_storage = RestaurantStorage(self.resource)
-        inspection_storage = InspectionStorage(self.resource)
+        restaurant_storage = DynamoDBRestaurantStorage(self.resource)
+        inspection_storage = DynamoDBInspectionStorage(self.resource)
         with file as zip_file:
             restaurants = self.read_restaurants(zip_file)
             inspections = self.read_inspections(zip_file)

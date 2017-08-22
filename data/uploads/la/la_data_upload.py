@@ -3,13 +3,13 @@ import datetime
 import boto3
 
 from data.data_error import DataError
-from data.restaurant_storage import RestaurantStorage
+from data.dynamodb.restaurant_storage import DynamoDBRestaurantStorage
 
 
 class LaDataUpload:
     def __init__(self):
         dynamodb = boto3.resource('dynamodb', endpoint_url='http://localhost:8000')
-        self.storage = RestaurantStorage(dynamodb)
+        self.storage = DynamoDBRestaurantStorage(dynamodb)
 
     @staticmethod
     def mdy_to_date(string):

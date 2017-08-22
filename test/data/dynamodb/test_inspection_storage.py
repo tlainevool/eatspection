@@ -1,14 +1,14 @@
 import unittest
 
-from data.inspection_storage import InspectionStorage
+from data.dynamodb.inspection_storage import DynamoDBInspectionStorage
 from model.inspection import Inspection
-from test.data.test_resource import TestResource
+from test.data.test_resource import TestDynamoDBResource
 
 
-class TestInspectionStorage(unittest.TestCase):
+class TestDynamoDBInspectionStorage(unittest.TestCase):
     def test_insert(self):
-        resource = TestResource()
-        storage = InspectionStorage(resource)
+        resource = TestDynamoDBResource()
+        storage = DynamoDBInspectionStorage(resource)
         inspection = Inspection(
             'test_123',
             "20170816",
