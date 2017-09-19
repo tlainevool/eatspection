@@ -7,7 +7,7 @@ class RestaurantTableCreator:
 
         # Create table
         c.execute('''CREATE TABLE restaurants
-                     (rid VARCHAR(30), 
+                     (rid VARCHAR(60), 
                      name VARCHAR(200), 
                      city VARCHAR(100), 
                      state VARCHAR(2), 

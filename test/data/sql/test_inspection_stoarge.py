@@ -34,6 +34,5 @@ class TestSQLInspectionStorage(unittest.TestCase):
                 self.assertEqual("20170601", inspection.date)
 
 
-
 if __name__ == '__main__':
     unittest.main()

@@ -30,7 +30,6 @@ class InspectionStorage:
         return inspections
 
     def get_latest_by_id(self, rid):
-        inspections = []
         cursor = self.connection.execute(
             'SELECT rid, MAX(Date), score '
             'FROM inspections WHERE '
@@ -41,4 +40,3 @@ class InspectionStorage:
         if len(rows) != 1:
             raise ValueError("Inspection with RID " + rid + " not found")
         return Inspection(rows[0][0], rows[0][1], rows[0][2])
-

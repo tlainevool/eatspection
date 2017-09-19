@@ -1,5 +1,3 @@
-from zipfile import ZipFile
-
 from data.uploads.la.la_data_upload import LaDataUpload
 from model.inspection import Inspection
 from model.restaurant import Restaurant
@@ -26,7 +24,7 @@ class LivesDataUpload(LaDataUpload):
         self.restaurant_storage = restaurant_storage
         self.inspection_storage = inspection_storage
 
-    def upload(self, file=ZipFile('LaBusinesses.zip')):
+    def upload(self, file):
         with file as zip_file:
             restaurants = self.read_restaurants(zip_file)
             inspections = self.read_inspections(zip_file)
@@ -45,14 +43,6 @@ class LivesDataUpload(LaDataUpload):
                 line = self.split_line_from_zip(line)
                 inspections.append(self.create_inspection_from_lives_data(line, header_mapping))
         return inspections
-
-    # @staticmethod
-    # def add_inspections(restaurants, inspections):
-    #     for inspection in inspections:
-    #         restaurant = restaurants[inspection.rid]
-    #         if not restaurant.inspect_date or inspection.date > restaurant.inspect_date:
-    #             restaurant.inspect_date = inspection.date
-    #             restaurant.score = inspection.score
 
     def read_restaurants(self, zip_file):
         restaurants = dict()

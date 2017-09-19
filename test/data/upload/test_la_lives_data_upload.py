@@ -1,6 +1,7 @@
 import unittest
 
 import sqlite3
+from zipfile import ZipFile
 
 from data.db_creation.sql.inspection_table_creator import InspectionTableCreator
 from data.db_creation.sql.restaurant_table_creator import RestaurantTableCreator
@@ -19,7 +20,7 @@ class TestLaLivesDataUpload(unittest.TestCase):
         inspection_storage = InspectionStorage(conn)
 
         data = LivesDataUpload(restaurant_storage, inspection_storage)
-        data.upload()
+        data.upload(ZipFile('LaBusinesses.zip'))
 
         actual = restaurant_storage.get_by_id("laca_PR0000031")
         self.assertEqual(actual.rid, "laca_PR0000031")
@@ -30,7 +31,3 @@ class TestLaLivesDataUpload(unittest.TestCase):
 
         latest = inspection_storage.get_latest_by_id("laca_PR0000031")
         self.assertEqual("20170420", latest.date)
-
-
-
-
