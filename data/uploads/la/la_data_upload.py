@@ -8,18 +8,18 @@ from data.dynamodb.restaurant_storage import DynamoDBRestaurantStorage
 
 class LaDataUpload:
     def __init__(self):
-        dynamodb = boto3.resource('dynamodb', endpoint_url='http://localhost:8000')
-        self.storage = DynamoDBRestaurantStorage(dynamodb)
+        # dynamodb = boto3.resource('dynamodb', endpoint_url='http://localhost:8000')
+        # self.storage = DynamoDBRestaurantStorage(dynamodb)
+        pass
 
     @staticmethod
     def mdy_to_date(string):
         date = datetime.datetime.strptime(string, '%m/%d/%Y').date()
         return str(date.year) + '-' + '%02d' % date.month + '-' + '%02d' % date.day
 
-    def save_to_db(self, restaurants):
-        for restaurant in restaurants:
-            try:
-                self.storage.insert(restaurant)
-            except DataError as err:
-                print("Unexpected Error:", err)
-
+    # def save_to_db(self, restaurants):
+    #     for restaurant in restaurants:
+    #         try:
+    #             self.storage.insert(restaurant)
+    #         except DataError as err:
+    #             print("Unexpected Error:", err)

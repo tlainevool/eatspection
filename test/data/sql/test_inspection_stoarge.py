@@ -7,7 +7,7 @@ from data.sql.inspection_storage import InspectionStorage
 from model.inspection import Inspection
 
 
-class TestDynamoDBInspectionStorage(unittest.TestCase):
+class TestSQLInspectionStorage(unittest.TestCase):
     def test_insert(self):
         conn = sqlite3.connect(':memory:')
 
@@ -19,11 +19,20 @@ class TestDynamoDBInspectionStorage(unittest.TestCase):
             "20170816",
             99)
         storage.insert(inspection)
+        inspection = Inspection(
+            'test_123',
+            "20170601",
+            98)
+        storage.insert(inspection)
 
-        actual = storage.get_by_id(inspection.rid)
-        self.assertEqual(actual.rid, inspection.rid)
-        self.assertEqual(actual.date, inspection.date)
-        self.assertEqual(actual.score, inspection.score)
+        actuals = storage.get_all_by_id(inspection.rid)
+        self.assertEqual(2, len(actuals))
+        for inspection in actuals:
+            if inspection.score == 99:
+                self.assertEqual("20170816", inspection.date)
+            elif inspection.score == 98:
+                self.assertEqual("20170601", inspection.date)
+
 
 
 if __name__ == '__main__':

@@ -1,7 +1,5 @@
 from zipfile import ZipFile
 
-from data.dynamodb.inspection_storage import DynamoDBInspectionStorage
-from data.dynamodb.restaurant_storage import DynamoDBRestaurantStorage
 from data.uploads.la.la_data_upload import LaDataUpload
 from model.inspection import Inspection
 from model.restaurant import Restaurant
@@ -23,22 +21,20 @@ def custom_split(s):
 
 
 class LivesDataUpload(LaDataUpload):
-
-    def __init__(self, resource):
-        self.resource = resource
+    def __init__(self, restaurant_storage, inspection_storage):
+        super().__init__()
+        self.restaurant_storage = restaurant_storage
+        self.inspection_storage = inspection_storage
 
     def upload(self, file=ZipFile('LaBusinesses.zip')):
-        restaurant_storage = DynamoDBRestaurantStorage(self.resource)
-        inspection_storage = DynamoDBInspectionStorage(self.resource)
         with file as zip_file:
             restaurants = self.read_restaurants(zip_file)
             inspections = self.read_inspections(zip_file)
-            self.add_inspections(restaurants, inspections)
+            # self.add_inspections(restaurants, inspections)
         for restaurant in restaurants.values():
-            restaurant_storage.insert(restaurant)
+            self.restaurant_storage.insert(restaurant)
         for inspection in inspections:
-            inspection_storage.insert(inspection)
-            print(inspection.rid, " - ", inspection.score)
+            self.inspection_storage.insert(inspection)
 
     def read_inspections(self, zip_file):
         with zip_file.open("inspections.csv") as inspections_file:
@@ -50,13 +46,13 @@ class LivesDataUpload(LaDataUpload):
                 inspections.append(self.create_inspection_from_lives_data(line, header_mapping))
         return inspections
 
-    @staticmethod
-    def add_inspections(restaurants, inspections):
-        for inspection in inspections:
-            restaurant = restaurants[inspection.rid]
-            if not restaurant.inspect_date or inspection.date > restaurant.inspect_date:
-                restaurant.inspect_date = inspection.date
-                restaurant.score = inspection.score
+    # @staticmethod
+    # def add_inspections(restaurants, inspections):
+    #     for inspection in inspections:
+    #         restaurant = restaurants[inspection.rid]
+    #         if not restaurant.inspect_date or inspection.date > restaurant.inspect_date:
+    #             restaurant.inspect_date = inspection.date
+    #             restaurant.score = inspection.score
 
     def read_restaurants(self, zip_file):
         restaurants = dict()
@@ -109,5 +105,7 @@ class LivesDataUpload(LaDataUpload):
 
 
 if __name__ == '__main__':
-    data = LivesDataUpload()
-    data.upload()
+    # conn = sqlite3.connect(':memory:')
+    # data = LivesDataUpload(conn)
+    # data.upload()
+    pass
