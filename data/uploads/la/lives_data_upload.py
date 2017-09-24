@@ -2,7 +2,6 @@ import datetime
 
 from model.inspection import Inspection
 from model.restaurant import Restaurant
-from util.string_util import capitalize_all
 
 
 def custom_split(s):
@@ -76,9 +75,9 @@ class LivesDataUpload():
     @staticmethod
     def create_restaurant_from_lives_data(line, header_map):
         rid = 'laca_' + line[header_map['business_id']]
-        name = capitalize_all(line[header_map['name']])
-        address = capitalize_all(line[header_map['address']])
-        city = capitalize_all(line[header_map["city"]])
+        name = line[header_map['name']].title()
+        address = line[header_map['address']].title()
+        city = line[header_map["city"]].title()
         state = line[header_map["state"]]
         zip_code = line[header_map["postal_code"]]
         latitude = line[header_map['latitude']]
