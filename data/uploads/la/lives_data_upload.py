@@ -1,4 +1,5 @@
-from data.uploads.la.la_data_upload import LaDataUpload
+import datetime
+
 from model.inspection import Inspection
 from model.restaurant import Restaurant
 from util.string_util import capitalize_all
@@ -17,8 +18,7 @@ def custom_split(s):
     words.append(s[start:])
     return words
 
-
-class LivesDataUpload(LaDataUpload):
+class LivesDataUpload():
     def __init__(self, restaurant_storage, inspection_storage):
         super().__init__()
         self.restaurant_storage = restaurant_storage

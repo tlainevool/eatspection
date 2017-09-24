@@ -20,7 +20,7 @@ class TestLaLivesDataUpload(unittest.TestCase):
         inspection_storage = InspectionStorage(conn)
 
         data = LivesDataUpload(restaurant_storage, inspection_storage)
-        data.upload(ZipFile('LaBusinesses.zip'))
+        data.upload(ZipFile('upload/LaBusinesses.zip'))
 
         actual = restaurant_storage.get_by_id("laca_PR0000031")
         self.assertEqual(actual.rid, "laca_PR0000031")
